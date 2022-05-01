@@ -1,0 +1,38 @@
+name: Push dist.sufu.site
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  Main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取主库源码
+        uses: actions/checkout@v2
+
+      - name: 获取 dist 仓库
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          repository: sufuwang/dist.sufu.site
+          token: ${{ secrets.DISTSUFUSITE }}
+          path: ./dist.sufu.site
+
+      - name: 执行脚本
+        run: |
+          npm i
+          npm run build
+          rm -rf ./dist.sufu.site/main
+          cp -r ./dist ./dist.sufu.site/main
+          ls
+      
+      - name: 推入 dist 仓库
+        run: |
+          cd ./dist.sufu.site
+          ls
+          git config --global user.email "1137120948@qq.com"
+          git config --global user.name "sufuwang"
+          git add .
+          git commit -m 'feat: 更新 main dist'
+          git push
