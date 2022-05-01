@@ -21,8 +21,6 @@ jobs:
 
       - name: 执行脚本
         run: |
-          npm i
-          npm run build
           rm -rf ./dist.sufu.site/main
           cp -r ./dist ./dist.sufu.site/main
           ls
